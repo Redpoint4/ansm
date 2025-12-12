@@ -24,11 +24,11 @@
 	<is_ebn>false</is_ebn>
 	<email>wdo@waybackmachinedownloader.com</email>
 	<theme_name>WmdTheme1041846</theme_name>
-	<server_url_front_page>https://www6.waybackmachinedownloader.com/wdo/files/demo/kotobee.com_wdo_waybackmachinedownloader.com_ah09kfyx01/</server_url_front_page>
-	<no_www_url>kotobee.com</no_www_url>
+	<server_url_front_page>https://www6.waybackmachinedownloader.com/wdo/files/demo/kotobee.org_wdo_waybackmachinedownloader.com_ah09kfyx01/</server_url_front_page>
+	<no_www_url>kotobee.org</no_www_url>
 	<hosted_domain/>
-	<original_archive_url>https://www.kotobee.com/</original_archive_url>
-	<final_archive_url>https://www.kotobee.com/</final_archive_url>
+	<original_archive_url>https://www.kotobee.org/</original_archive_url>
+	<final_archive_url>https://www.kotobee.org/</final_archive_url>
 	<front_page_code_date/>
 	<total_urls_from_api/>
 	<max_reached_live>false</max_reached_live>
