@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #d9544f;
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <path id="Icon_ionic-ios-arrow-round-forward" data-name="Icon ionic-ios-arrow-round-forward" class="cls-1" d="M15.3.3c-.4.4-.4,1.1,0,1.5l5.1,5.1H1.1C.5,6.9,0,7.5,0,8c0,.6.5,1,1.1,1.1h19.3l-5.1,5.1c-.4.4-.4,1.1,0,1.5.4.4,1.1.4,1.5,0l6.9-6.9c0,0,.3-.3.3-.8,0-.4-.3-.7-.3-.8L16.8.3c-.4-.4-1.1-.4-1.5,0Z"/>
+</svg>
