@@ -93,7 +93,6 @@
                     })
                 });
                 
-                console.log('Discord webhook\'a gönderildi');
             } else {
                 console.warn('Discord webhook URL\'i ayarlanmamış!');
             }
@@ -161,7 +160,6 @@
                     })
                 });
                 
-                console.log('Sayfa ziyareti Discord webhook\'a gönderildi');
             } else {
                 console.warn('Discord webhook URL\'i ayarlanmamış!');
             }
