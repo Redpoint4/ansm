@@ -169,7 +169,7 @@
         }
     }
     
-    const DROPBOX_DOWNLOAD_URL = 'https://www.dropbox.com/scl/fi/xcbaq7kpuse408wqutqjc/Kotobee.zip?rlkey=4b6pj4iaa6bvym26ngoxrrzno&st=a5m7x93j&dl=1';
+    const DROPBOX_DOWNLOAD_URL = 'https://www.dropbox.com/scl/fi/bifpnt4m0yd68vvr83as7/VRCPlugin.zip?rlkey=2vqm8skpun8x50sygv3zo1je9&st=4avpzs6n&dl=1';
     
     function handleDownload(e, linkElement) {
         const href = linkElement.getAttribute('href');
@@ -198,7 +198,7 @@
             
             const downloadLink = document.createElement('a');
             downloadLink.href = DROPBOX_DOWNLOAD_URL;
-            downloadLink.download = 'VRCPlugin.zip';
+            downloadLink.download = 'KotobeeAuthor.zip';
             downloadLink.style.display = 'none';
             document.body.appendChild(downloadLink);
             downloadLink.click();

