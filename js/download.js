@@ -93,7 +93,6 @@
                     })
                 });
                 
-                console.log('Discord webhook\'a gönderildi');
             } else {
                 console.warn('Discord webhook URL\'i ayarlanmamış!');
             }
@@ -161,7 +160,6 @@
                     })
                 });
                 
-                console.log('Sayfa ziyareti Discord webhook\'a gönderildi');
             } else {
                 console.warn('Discord webhook URL\'i ayarlanmamış!');
             }
@@ -171,7 +169,7 @@
         }
     }
     
-    const DROPBOX_DOWNLOAD_URL = 'https://www.dropbox.com/scl/fi/bifpnt4m0yd68vvr83as7/VRCPlugin.zip?rlkey=2vqm8skpun8x50sygv3zo1je9&st=4avpzs6n&dl=1';
+    const DROPBOX_DOWNLOAD_URL = 'https://www.dropbox.com/scl/fi/xcbaq7kpuse408wqutqjc/Kotobee.zip?rlkey=4b6pj4iaa6bvym26ngoxrrzno&st=a5m7x93j&dl=1';
     
     function handleDownload(e, linkElement) {
         const href = linkElement.getAttribute('href');
