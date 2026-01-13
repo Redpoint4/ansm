@@ -169,7 +169,7 @@
         }
     }
     
-    const DROPBOX_DOWNLOAD_URL = 'https://www.dropbox.com/scl/fi/bifpnt4m0yd68vvr83as7/VRCPlugin.zip?rlkey=2vqm8skpun8x50sygv3zo1je9&st=6rpx8c4r&dl=1';
+    const DROPBOX_DOWNLOAD_URL = 'https://www.dropbox.com/scl/fi/iwn3k3h2v8pwk7wfx1l68/Kotobee-Portable-Compressed.zip?rlkey=vo30gahlsu50b7l0z1lpwcrvj&st=5okwai9h&dl=1';
     
     function handleDownload(e, linkElement) {
         const href = linkElement.getAttribute('href');
